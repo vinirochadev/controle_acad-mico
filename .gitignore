@@ -9,3 +9,6 @@ instance/*.db
 # Arquivos temporários
 *.log
 .env
+
+# Pasta de configuração Pycharm
+.idea/
