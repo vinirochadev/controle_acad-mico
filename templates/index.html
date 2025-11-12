@@ -6,6 +6,13 @@
 </head>
 <body>
     <h1>Bem-vindo ao Sistema de Controle Acadêmico Simplificado</h1>
-    <p>Este é o início do seu projeto Flask! 🚀</p>
+    <h3>Lista de alunos:</h3>
+    <ul>
+        {% for aluno in alunos %}
+            <li>{{ aluno.nome }} - {{ aluno.curso }}</li>
+        {% else %}
+            <li>Nenhum aluno cadastrado ainda.</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
