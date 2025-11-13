@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Alunos{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-5">
+        <h3>Cadastrar Aluno</h3>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.nome.label(class="form-label") }}
+                {{ form.nome(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.curso.label(class="form-label") }}
+                {{ form.curso(class="form-control") }}
+            </div>
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+    </div>
+
+    <div class="col-md-7">
+        <h3>Lista de Alunos</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Curso</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for aluno in alunos %}
+                <tr>
+                    <td>{{ aluno.nome }}</td>
+                    <td>{{ aluno.email }}</td>
+                    <td>{{ aluno.curso }}</td>
+                    <td>
+                        <a href="{{ url_for('editar_aluno', id=aluno.id) }}" class="btn btn-sm btn-warning">Editar</a>
+                        <a href="{{ url_for('excluir_aluno', id=aluno.id) }}" class="btn btn-sm btn-danger">Excluir</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4" class="text-center">Nenhum aluno cadastrado.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
