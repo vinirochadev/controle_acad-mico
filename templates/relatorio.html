@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Relatório{% endblock %}
+
+{% block content %}
+<h3>Relatório Acadêmico</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Aluno</th>
+            <th>Disciplina</th>
+            <th>Média</th>
+            <th>Situação</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for linha in relatorio %}
+        <tr>
+            <td>{{ linha.aluno }}</td>
+            <td>{{ linha.disciplina }}</td>
+            <td>{{ "%.2f"|format(linha.media) }}</td>
+            <td>
+                {% if linha.media >= 6 %}
+                <span class="badge bg-success">Aprovado</span>
+                {% else %}
+                <span class="badge bg-danger">Reprovado</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="text-center">Nenhum registro disponível.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

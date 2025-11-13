@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Disciplinas{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-5">
+        <h3>Cadastrar Disciplina</h3>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.nome.label(class="form-label") }}
+                {{ form.nome(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.professor.label(class="form-label") }}
+                {{ form.professor(class="form-control") }}
+            </div>
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+    </div>
+
+    <div class="col-md-7">
+        <h3>Lista de Disciplinas</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Professor</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for disciplina in disciplinas %}
+                <tr>
+                    <td>{{ disciplina.nome }}</td>
+                    <td>{{ disciplina.professor }}</td>
+                    <td>
+                        <a href="{{ url_for('editar_disciplina', id=disciplina.id) }}" class="btn btn-sm btn-warning">Editar</a>
+                        <a href="{{ url_for('excluir_disciplina', id=disciplina.id) }}" class="btn btn-sm btn-danger">Excluir</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="3" class="text-center">Nenhuma disciplina cadastrada.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Notas{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-5">
+        <h3>Registrar Nota</h3>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.aluno_id.label(class="form-label") }}
+                {{ form.aluno_id(class="form-select") }}
+            </div>
+            <div class="mb-3">
+                {{ form.disciplina_id.label(class="form-label") }}
+                {{ form.disciplina_id(class="form-select") }}
+            </div>
+            <div class="mb-3">
+                {{ form.valor.label(class="form-label") }}
+                {{ form.valor(class="form-control") }}
+            </div>
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+    </div>
+
+    <div class="col-md-7">
+        <h3>Notas Registradas</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Aluno</th>
+                    <th>Disciplina</th>
+                    <th>Nota</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for nota in notas %}
+                <tr>
+                    <td>{{ nota.aluno.nome }}</td>
+                    <td>{{ nota.disciplina.nome }}</td>
+                    <td>{{ nota.valor }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="3" class="text-center">Nenhuma nota registrada.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
