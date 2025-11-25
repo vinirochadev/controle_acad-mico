@@ -1,18 +1,40 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Sistema Acadêmico</title>
-</head>
-<body>
-    <h1>Bem-vindo ao Sistema de Controle Acadêmico Simplificado</h1>
-    <h3>Lista de alunos:</h3>
-    <ul>
-        {% for aluno in alunos %}
-            <li>{{ aluno.nome }} - {{ aluno.curso }}</li>
-        {% else %}
-            <li>Nenhum aluno cadastrado ainda.</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Início{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-speedometer2"></i> Dashboard</h2>
+
+<div class="row">
+    <div class="col-md-3 mb-3">
+        <div class="card text-bg-primary dashboard-card p-3 shadow-sm">
+            <h4><i class="bi bi-people-fill"></i></h4>
+            <h5>Alunos</h5>
+            <h2>{{ total_alunos }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card text-bg-success dashboard-card p-3 shadow-sm">
+            <h4><i class="bi bi-journal-bookmark-fill"></i></h4>
+            <h5>Disciplinas</h5>
+            <h2>{{ total_disciplinas }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card text-bg-warning dashboard-card p-3 shadow-sm">
+            <h4><i class="bi bi-pencil-fill"></i></h4>
+            <h5>Notas</h5>
+            <h2>{{ total_notas }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card text-bg-info dashboard-card p-3 shadow-sm">
+            <h4><i class="bi bi-star-fill"></i></h4>
+            <h5>Média Geral</h5>
+            <h2>{{ media_geral|round(1) }}</h2>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -15,7 +15,19 @@ def create_app():
     # ----------------------------
     @app.route('/')
     def index():
-        return render_template('index.html')
+        total_alunos = Aluno.query.count()
+        total_disciplinas = Disciplina.query.count()
+        total_notas = Nota.query.count()
+
+        media_geral = db.session.query(func.avg(Nota.valor)).scalar() or 0
+
+        return render_template(
+            'index.html',
+            total_alunos=total_alunos,
+            total_disciplinas=total_disciplinas,
+            total_notas=total_notas,
+            media_geral=media_geral
+        )
 
     # ----------------------------
     # CRUD DE ALUNOS
