@@ -2,49 +2,106 @@
 {% block title %}Notas{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-5">
-        <h3>Registrar Nota</h3>
-        <form method="POST">
-            {{ form.hidden_tag() }}
-            <div class="mb-3">
-                {{ form.aluno_id.label(class="form-label") }}
-                {{ form.aluno_id(class="form-select") }}
-            </div>
-            <div class="mb-3">
-                {{ form.disciplina_id.label(class="form-label") }}
-                {{ form.disciplina_id(class="form-select") }}
-            </div>
-            <div class="mb-3">
-                {{ form.valor.label(class="form-label") }}
-                {{ form.valor(class="form-control") }}
-            </div>
-            {{ form.submit(class="btn btn-primary") }}
-        </form>
+{% from "macros/form_macros.html" import render_field %}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="bi bi-pencil-square"></i> Registrar Nota</h5>
     </div>
 
-    <div class="col-md-7">
-        <h3>Notas Registradas</h3>
-        <table class="table table-striped">
-            <thead>
+    <div class="card-body">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            {{ render_field(form.aluno_id) }}
+            {{ render_field(form.disciplina_id) }}
+            {{ render_field(form.valor) }}
+
+            {{ form.submit(class="btn btn-primary w-100") }}
+        </form>
+    </div>
+</div>
+
+<!-- FILTRO DE BUSCA -->
+<form method="GET" class="row g-2 p-3">
+
+    <div class="col-md-4">
+        <select name="aluno" class="form-select">
+            <option value="">Todos os alunos</option>
+            {% for a in alunos_select %}
+            <option value="{{ a.id }}" {% if aluno_filtro == a.id|string %}selected{% endif %}>
+                {{ a.nome }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-4">
+        <select name="disciplina" class="form-select">
+            <option value="">Todas as disciplinas</option>
+            {% for d in disciplinas_select %}
+            <option value="{{ d.id }}" {% if disciplina_filtro == d.id|string %}selected{% endif %}>
+                {{ d.nome }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-2 d-grid">
+        <button class="btn btn-outline-primary" type="submit">Filtrar</button>
+    </div>
+
+</form>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0"><i class="bi bi-list-check"></i> Notas Registradas</h5>
+    </div>
+
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
                 <tr>
                     <th>Aluno</th>
                     <th>Disciplina</th>
                     <th>Nota</th>
+                    <th class="text-end">Ações</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+
+                <tbody>
                 {% for nota in notas %}
                 <tr>
                     <td>{{ nota.aluno.nome }}</td>
                     <td>{{ nota.disciplina.nome }}</td>
                     <td>{{ nota.valor }}</td>
+
+                    <td class="text-end">
+
+                        <button class="btn btn-sm btn-outline-warning rounded-2"
+                                onclick="abrirModalEdicao('{{ url_for('editar_nota', id=nota.id) }}', 'Editar Nota')">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+
+                        <button class="btn btn-sm btn-outline-danger rounded-2"
+                                onclick="abrirModalExclusao('{{ url_for('excluir_nota', id=nota.id) }}', 'Excluir Nota')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+
+                    </td>
                 </tr>
+
                 {% else %}
-                <tr><td colspan="3" class="text-center">Nenhuma nota registrada.</td></tr>
+                <tr>
+                    <td colspan="4" class="text-center py-3">Nenhuma nota registrada.</td>
+                </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+                </tbody>
+
+            </table>
+        </div>
     </div>
 </div>
+
 {% endblock %}

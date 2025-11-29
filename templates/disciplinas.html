@@ -2,48 +2,96 @@
 {% block title %}Disciplinas{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-5">
-        <h3>Cadastrar Disciplina</h3>
-        <form method="POST">
-            {{ form.hidden_tag() }}
-            <div class="mb-3">
-                {{ form.nome.label(class="form-label") }}
-                {{ form.nome(class="form-control") }}
-            </div>
-            <div class="mb-3">
-                {{ form.professor.label(class="form-label") }}
-                {{ form.professor(class="form-control") }}
-            </div>
-            {{ form.submit(class="btn btn-primary") }}
-        </form>
+
+{% from "macros/form_macros.html" import render_field %}
+
+<!-- CARD DE CADASTRO -->
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="bi bi-journal-bookmark"></i> Cadastrar Disciplina</h5>
     </div>
 
-    <div class="col-md-7">
-        <h3>Lista de Disciplinas</h3>
-        <table class="table table-striped">
-            <thead>
+    <div class="card-body">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            {{ render_field(form.nome) }}
+            {{ render_field(form.professor) }}
+
+            {{ form.submit(class="btn btn-primary w-100") }}
+        </form>
+    </div>
+</div>
+
+<!-- FILTRO DE BUSCA -->
+<form method="GET" class="row g-2 p-3">
+
+    <div class="col-md-6">
+        <select name="professor" class="form-select">
+            <option value="">Todos os professores</option>
+            {% for p in professores %}
+            <option value="{{ p }}" {% if professor_filtro == p %}selected{% endif %}>
+                {{ p }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-2 d-grid">
+        <button class="btn btn-outline-primary" type="submit">Filtrar</button>
+    </div>
+
+</form>
+
+<!-- CARD DA LISTA -->
+<div class="card shadow-sm">
+    <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0"><i class="bi bi-journal"></i> Lista de Disciplinas</h5>
+    </div>
+
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+
+                <thead class="table-light">
                 <tr>
                     <th>Nome</th>
                     <th>Professor</th>
-                    <th>Ações</th>
+                    <th class="text-end">Ações</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+
+                <tbody>
                 {% for disciplina in disciplinas %}
                 <tr>
                     <td>{{ disciplina.nome }}</td>
                     <td>{{ disciplina.professor }}</td>
-                    <td>
-                        <a href="{{ url_for('editar_disciplina', id=disciplina.id) }}" class="btn btn-sm btn-warning">Editar</a>
-                        <a href="{{ url_for('excluir_disciplina', id=disciplina.id) }}" class="btn btn-sm btn-danger">Excluir</a>
+                    <td class="text-end">
+
+                        <button class="btn btn-sm btn-outline-warning rounded-2"
+                                onclick="abrirModalEdicao('{{ url_for('editar_disciplina', id=disciplina.id) }}', 'Editar Disciplina')">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+
+                        <button class="btn btn-sm btn-outline-danger rounded-2"
+                                onclick="abrirModalExclusao('{{ url_for('excluir_disciplina', id=disciplina.id) }}', 'Excluir Disciplina')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+
                     </td>
                 </tr>
                 {% else %}
-                <tr><td colspan="3" class="text-center">Nenhuma disciplina cadastrada.</td></tr>
+                <tr>
+                    <td colspan="3" class="text-center py-3">
+                        Nenhuma disciplina cadastrada.
+                    </td>
+                </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+                </tbody>
+
+            </table>
+        </div>
     </div>
 </div>
+
 {% endblock %}

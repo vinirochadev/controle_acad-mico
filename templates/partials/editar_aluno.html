@@ -1,0 +1,23 @@
+<form method="POST" action="{{ url_for('editar_aluno', id=aluno.id) }}">
+
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+        {{ form.nome.label(class="form-label") }}
+        {{ form.nome(class="form-control") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.email.label(class="form-label") }}
+        {{ form.email(class="form-control") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.curso.label(class="form-label") }}
+        {{ form.curso(class="form-control") }}
+    </div>
+
+    <div class="text-end">
+        {{ form.submit(class="btn btn-primary") }}
+    </div>
+</form>

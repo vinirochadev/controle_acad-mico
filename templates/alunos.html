@@ -2,54 +2,102 @@
 {% block title %}Alunos{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-5">
-        <h3>Cadastrar Aluno</h3>
-        <form method="POST">
-            {{ form.hidden_tag() }}
-            <div class="mb-3">
-                {{ form.nome.label(class="form-label") }}
-                {{ form.nome(class="form-control") }}
-            </div>
-            <div class="mb-3">
-                {{ form.email.label(class="form-label") }}
-                {{ form.email(class="form-control") }}
-            </div>
-            <div class="mb-3">
-                {{ form.curso.label(class="form-label") }}
-                {{ form.curso(class="form-control") }}
-            </div>
-            {{ form.submit(class="btn btn-primary") }}
-        </form>
+
+{% from "macros/form_macros.html" import render_field %}
+
+<!-- CARD DE CADASTRO -->
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="bi bi-person-plus"></i> Cadastrar Aluno</h5>
     </div>
 
-    <div class="col-md-7">
-        <h3>Lista de Alunos</h3>
-        <table class="table table-striped">
-            <thead>
+    <div class="card-body">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            {{ render_field(form.nome) }}
+            {{ render_field(form.email) }}
+            {{ render_field(form.curso) }}
+            {{ form.submit(class="btn btn-primary w-100") }}
+        </form>
+    </div>
+</div>
+
+<!-- CARD DA LISTA -->
+<div class="card shadow-sm">
+
+    <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0"><i class="bi bi-people"></i> Lista de Alunos</h5>
+    </div>
+
+    <div class="card-body">
+
+        <!-- FILTRO DE BUSCA -->
+        <form method="GET" class="row g-2 p-3">
+
+            <div class="col-md-4">
+    <select name="curso" class="form-select">
+        <option value="">Todos os cursos</option>
+        {% for c in cursos %}
+        <option value="{{ c }}" {% if curso_filtro == c %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<div class="col-md-2 d-grid">
+    <button class="btn btn-outline-primary" type="submit">Filtrar</button>
+</div>
+
+
+        </form>
+
+        <!-- TABELA -->
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+
+                <thead class="table-light">
                 <tr>
                     <th>Nome</th>
                     <th>Email</th>
                     <th>Curso</th>
-                    <th>Ações</th>
+                    <th class="text-end">Ações</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+
+                <tbody>
+
                 {% for aluno in alunos %}
                 <tr>
                     <td>{{ aluno.nome }}</td>
                     <td>{{ aluno.email }}</td>
                     <td>{{ aluno.curso }}</td>
-                    <td>
-                        <a href="{{ url_for('editar_aluno', id=aluno.id) }}" class="btn btn-sm btn-warning">Editar</a>
-                        <a href="{{ url_for('excluir_aluno', id=aluno.id) }}" class="btn btn-sm btn-danger">Excluir</a>
+
+                    <td class="text-end">
+
+                        <button class="btn btn-sm btn-outline-warning rounded-2"
+                                onclick="abrirModalEdicao('{{ url_for('editar_aluno', id=aluno.id) }}',
+                                                          'Editar Aluno')">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+
+                        <button class="btn btn-sm btn-outline-danger rounded-2"
+                                onclick="abrirModalExclusao('{{ url_for('excluir_aluno', id=aluno.id) }}',
+                                                            'Excluir Aluno')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+
                     </td>
                 </tr>
+
                 {% else %}
-                <tr><td colspan="4" class="text-center">Nenhum aluno cadastrado.</td></tr>
+                <tr>
+                    <td colspan="4" class="text-center py-3">Nenhum aluno cadastrado.</td>
+                </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
 {% endblock %}

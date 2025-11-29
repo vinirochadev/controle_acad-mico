@@ -2,33 +2,49 @@
 {% block title %}Relatório{% endblock %}
 
 {% block content %}
-<h3>Relatório Acadêmico</h3>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Aluno</th>
-            <th>Disciplina</th>
-            <th>Média</th>
-            <th>Situação</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for linha in relatorio %}
-        <tr>
-            <td>{{ linha.aluno }}</td>
-            <td>{{ linha.disciplina }}</td>
-            <td>{{ "%.2f"|format(linha.media) }}</td>
-            <td>
-                {% if linha.media >= 6 %}
-                <span class="badge bg-success">Aprovado</span>
-                {% else %}
-                <span class="badge bg-danger">Reprovado</span>
-                {% endif %}
-            </td>
-        </tr>
-        {% else %}
-        <tr><td colspan="4" class="text-center">Nenhum registro disponível.</td></tr>
-        {% endfor %}
-    </tbody>
-</table>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">
+            <i class="bi bi-bar-chart"></i> Média de Notas por Disciplina
+        </h5>
+    </div>
+
+    <div class="card-body">
+        <canvas id="graficoMedias" style="max-height: 380px;"></canvas>
+    </div>
+</div>
+
+<!-- Script do Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const ctx = document.getElementById("graficoMedias");
+
+    new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: {{ labels|tojson }},
+            datasets: [{
+                label: "Média das Notas",
+                data: {{ medias|tojson }},
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 10
+                }
+            }
+        }
+    });
+});
+</script>
+
 {% endblock %}

@@ -1,0 +1,22 @@
+<form method="POST" action="{{ url_for('editar_nota', id=nota.id) }}">
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+        {{ form.aluno_id.label(class="form-label") }}
+        {{ form.aluno_id(class="form-select") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.disciplina_id.label(class="form-label") }}
+        {{ form.disciplina_id(class="form-select") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.valor.label(class="form-label") }}
+        {{ form.valor(class="form-control") }}
+    </div>
+
+    <div class="text-end">
+        {{ form.submit(class="btn btn-primary") }}
+    </div>
+</form>
